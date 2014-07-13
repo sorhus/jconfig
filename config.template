@@ -1,0 +1,5 @@
+DB=configs
+HOST=localhost
+USER=user
+PASSWORD=password
+PORT=8080
