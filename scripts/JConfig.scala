@@ -19,14 +19,14 @@ class JConfig(path: String = "/etc/jconfig/config") {
     }
   }
 
-  def getHostAndPort: (String, String) = {
+  private def getHostAndPort: (String, String) = {
     val config = readConfig(path)
     val host = config.get("HOST").get
     val port = config.get("PORT").get
     (host, port)
   }
 
-  def readConfig(path: String): Map[String, String] = {
+  private def readConfig(path: String): Map[String, String] = {
     Source.fromFile(path)
       .mkString
       .split("\n")
