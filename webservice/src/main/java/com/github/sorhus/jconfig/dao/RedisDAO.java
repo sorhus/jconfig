@@ -1,4 +1,4 @@
-package com.github.sorhus.jconfig.service;
+package com.github.sorhus.jconfig.dao;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -6,11 +6,11 @@ import redis.clients.jedis.JedisPool;
 /**
  * @author: anton.sorhus@gmail.com
  */
-public class RedisService implements Service {
+public class RedisDAO implements DAO {
 
     JedisPool jedisPool;
 
-    public RedisService(JedisPool jedisPool) {
+    public RedisDAO(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
 

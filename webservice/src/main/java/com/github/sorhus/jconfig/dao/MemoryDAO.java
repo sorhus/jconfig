@@ -1,4 +1,4 @@
-package com.github.sorhus.jconfig.service;
+package com.github.sorhus.jconfig.dao;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -6,11 +6,11 @@ import java.util.Map;
 /**
  * @author: anton.sorhus@gmail.com
  */
-public class HashMapService implements Service {
+public class MemoryDAO implements DAO {
 
     private final Map<String, String> map;
 
-    public HashMapService(final int size) {
+    public MemoryDAO(final int size) {
         this.map = new LinkedHashMap<String, String>(16, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<String, String> entry) {

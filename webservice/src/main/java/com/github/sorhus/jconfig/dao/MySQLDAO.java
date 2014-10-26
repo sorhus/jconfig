@@ -1,4 +1,4 @@
-package com.github.sorhus.jconfig.service;
+package com.github.sorhus.jconfig.dao;
 
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
@@ -7,11 +7,11 @@ import org.skife.jdbi.v2.util.StringMapper;
 /**
  * @author: anton.sorhus@gmail.com
  */
-public class MySQLService implements Service {
+public class MySQLDAO implements DAO {
 
     DBI dbi;
 
-    public MySQLService(DBI dbi) {
+    public MySQLDAO(DBI dbi) {
         this.dbi = dbi;
     }
 
