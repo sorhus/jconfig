@@ -11,6 +11,7 @@
   </bean>
   <bean id="dao" class="com.github.sorhus.jconfig.dao.RedisDAO">
     <constructor-arg index="0" ref="jedisPool"/>
+    <constructor-arg index="1" value="jconfig"/>
   </bean>
 
 

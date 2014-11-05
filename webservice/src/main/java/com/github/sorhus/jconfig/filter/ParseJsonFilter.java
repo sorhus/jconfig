@@ -1,4 +1,4 @@
-package com.github.sorhus.jconfig;
+package com.github.sorhus.jconfig.filter;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -27,7 +27,7 @@ public class ParseJsonFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.debug("applying filter {}", getClass());
+        log.info("applying filter {}", getClass());
         String json = servletRequest.getParameter("json");
         try {
             Object o = gson.fromJson(json, Object.class);

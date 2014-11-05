@@ -1,7 +1,6 @@
-package com.github.sorhus.jconfig;
+package com.github.sorhus.jconfig.servlet;
 
 import com.github.sorhus.jconfig.dao.DAO;
-import com.google.gson.JsonParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,18 +26,18 @@ public class JConfigServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id");
+    protected void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws ServletException, IOException {
+        String id = servletRequest.getParameter("id");
         log.info("incoming get, id: {}", id);
         String result = dao.get(id);
         log.debug("dao returned, json: {}", result);
         if(null != result) {
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("utf-8");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().print(result);
+            servletResponse.setContentType("application/json");
+            servletResponse.setCharacterEncoding("utf-8");
+            servletResponse.setStatus(HttpServletResponse.SC_OK);
+            servletResponse.getWriter().print(result);
         } else {
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            servletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 

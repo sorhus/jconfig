@@ -31,8 +31,8 @@ class JConfig(path: String = "/etc/jconfig/config") {
       .mkString
       .split("\n")
       .map{ line =>
-        val Array(key, value) = line.split("=")
-        key -> value
+        val Array(key, json) = line.split("=")
+        key -> json
       }
       .toMap
   }
