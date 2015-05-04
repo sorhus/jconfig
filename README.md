@@ -1,4 +1,4 @@
-jconfig
+JConfig
 =======
 
 JConfig is a small webapp that will let you store key value pairs in memeory, sql or redis. 
