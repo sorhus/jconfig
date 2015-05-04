@@ -1,4 +1,4 @@
-package com.github.sorhus.jconfig;
+package com.github.sorhus.jconfig.server;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;

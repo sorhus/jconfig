@@ -1,5 +1,6 @@
-package com.github.sorhus.jconfig.compression;
+package com.github.sorhus.jconfig.dao;
 
+import com.github.sorhus.jconfig.compression.Compressor;
 import com.github.sorhus.jconfig.dao.DAO;
 import com.github.sorhus.jconfig.model.Config;
 import org.slf4j.Logger;

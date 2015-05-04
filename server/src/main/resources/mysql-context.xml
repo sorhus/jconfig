@@ -11,7 +11,7 @@
   </bean>
 
   <bean id="dbi" class="org.skife.jdbi.v2.DBI">
-    <constructor-arg index="0" value="jdbc:mysql://${HOST}/${DB}?user=${USER}&amp;password=${PASSWORD}"/>
+    <constructor-arg index="0" value="jdbc:mysql://${mysql_db_host}/${mysql_db}?user=${mysql_db_user}&amp;password=${mysql_db_password}"/>
   </bean>
   <bean id="dao" factory-bean="dbi" factory-method="open">
     <constructor-arg type="java.lang.Class" value="com.github.sorhus.jconfig.dao.MySQLDAO"/>

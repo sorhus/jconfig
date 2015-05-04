@@ -14,7 +14,7 @@ public class MemoryDAO implements DAO {
     private final Map<String, String> map;
 
     public MemoryDAO(final int size) {
-        this.map = new LinkedHashMap<String, String>(16, 0.75f, true) {
+        this.map = new LinkedHashMap<String, String>(size + 1, 1.0f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<String, String> entry) {
                 return size() > size;

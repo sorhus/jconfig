@@ -50,9 +50,9 @@ public class RedisDAO implements DAO {
     // TODO implement with scan
     public Iterable<Config> getAll() {
         try(Jedis jedis = jedisPool.getResource()) {
-            Map<String,String> content = jedis.hgetAll(jc);
+            Map<String, String> content = jedis.hgetAll(jc);
             List<Config> result = new LinkedList<>();
-            for(Map.Entry<String,String> entry : content.entrySet()) {
+            for(Map.Entry<String, String> entry : content.entrySet()) {
                 result.add(new Config(entry.getKey(), entry.getValue()));
             }
             return result;
