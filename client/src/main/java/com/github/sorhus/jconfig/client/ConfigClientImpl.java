@@ -2,40 +2,38 @@ package com.github.sorhus.jconfig.client;
 
 import com.github.sorhus.jconfig.compression.GZipCompressor;
 import com.github.sorhus.jconfig.model.Config;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 class ConfigClientImpl {
 
     private final boolean compress;
-    private final String baseGetURL;
-    private final String baseSetURL;
+    private final String baseURL;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Gson gson = new Gson();
     private final GZipCompressor compressor = new GZipCompressor();
 
     ConfigClientImpl(String host, int port, boolean compress) {
         this.compress = compress;
-        this.baseGetURL = String.format("http://%s:%d/api/get?id=", host, port);
-        this.baseSetURL = String.format("http://%s:%d/api/set", host, port);
+        this.baseURL = String.format("http://%s:%d/api/v1/", host, port);
     }
 
-    String get(String id) {
+    String get(String key) {
         try {
-            URL url = new URL(baseGetURL + id);
-            URLConnection connection = url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            InputStream input = new URL(baseURL + "get?key=" + key).openConnection().getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             StringBuilder response = new StringBuilder();
             String line;
-            while ((line = in.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 response.append(line);
             }
-            in.close();
+            reader.close();
             return compress ? compressor.decompress(response.toString()) : response.toString();
         } catch (FileNotFoundException e) {
             log.info("Get failed:", e);
@@ -45,11 +43,13 @@ class ConfigClientImpl {
         return null;
     }
 
-    boolean put(String id, String json) {
+    boolean put(String key, String value) {
         try {
-            URL url = new URL(baseSetURL);
-            String output = String.format("id=%s&json=%s", id, compress ? compressor.compress(json) : json);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            if(compress) {
+                value = compressor.compress(value);
+            }
+            String output = "key=" + key + "&value=" + value;
+            HttpURLConnection connection = (HttpURLConnection) new URL(baseURL + "set").openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
@@ -57,12 +57,12 @@ class ConfigClientImpl {
             outputStream.close();
             return connection.getResponseCode() == 200;
         } catch (IOException e) {
-            log.info("Put failed:", e);
+            log.warn("Put failed:", e);
             return false;
         }
     }
 
     boolean put(Config config) {
-        return put(config.getId(), config.getJson());
+        return put(config.getKey(), config.getValue());
     }
 }

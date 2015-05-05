@@ -15,19 +15,19 @@ public class JConfigClient {
 
     public JConfigClient(String path) throws IOException {
         Properties properties = new Properties();
-        FileInputStream in = new FileInputStream(path);
-        properties.load(in);
-        in.close();
+        FileInputStream file = new FileInputStream(path);
+        properties.load(file);
+        file.close();
         String host = properties.getProperty("jconfig.host");
         int port = Integer.parseInt(properties.getProperty("jconfig.port"));
-        boolean compress = Boolean.parseBoolean(properties.getProperty("jconfig.compress"));
+        boolean compress = Boolean.parseBoolean(properties.getProperty("jconfig.compress", "false"));
         this.client = new ConfigClientImpl(host, port, compress);
     }
 
     public JConfigClient(Properties properties) {
         String host = properties.getProperty("jconfig.host");
         int port = Integer.parseInt(properties.getProperty("jconfig.port"));
-        boolean compress = Boolean.parseBoolean(properties.getProperty("jconfig.compress"));
+        boolean compress = Boolean.parseBoolean(properties.getProperty("jconfig.compress", "false"));
         this.client = new ConfigClientImpl(host, port, compress);
     }
 

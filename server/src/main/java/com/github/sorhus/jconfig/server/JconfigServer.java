@@ -23,8 +23,8 @@ class JconfigServer {
     @Parameter(names = {"-b", "--backend"})
     String backend = "memory"; // mysql, redis
 
-    @Parameter(names = {"-s", "--strict-json"})
-    boolean strictJson = false;
+    @Parameter(names = {"-j", "--json-strict"}, arity = 1)
+    boolean strictJson = true;
 
     @Parameter(names = {"-c", "--compress"})
     boolean compress = false;
@@ -41,6 +41,7 @@ class JconfigServer {
         String contextFile = String.format("%s-context.xml", backend);
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(contextFile);
         DAO dao = context.getBean("dao", DAO.class);
+
         if(compress) {
             dao = new CompressedDao(dao, new FakeCompressor());
         }
@@ -48,9 +49,10 @@ class JconfigServer {
         final Server server = new Server(port);
         ServletContextHandler contextHandler = new ServletContextHandler(server, "/");
         contextHandler.setAttribute("dao", dao);
+        contextHandler.setAttribute("strictJson", strictJson);
 
-        contextHandler.addServlet(JConfigServlet.class, "/api/get");
-        contextHandler.addServlet(JConfigServlet.class, "/api/set");
+        contextHandler.addServlet(JConfigServlet.class, "/api/v1/get");
+        contextHandler.addServlet(JConfigServlet.class, "/api/v1/set");
 
         if(strictJson) {
             contextHandler.addFilter(ParseJsonFilter.class, "/api/set", EnumSet.of(DispatcherType.REQUEST));

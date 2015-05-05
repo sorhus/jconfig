@@ -5,20 +5,20 @@ package com.github.sorhus.jconfig.model;
  */
 public class Config {
 
-    private final String id;
-    private final String json;
+    private final String key;
+    private final String value;
 
-    public Config(String id, String json) {
-        this.id = id;
-        this.json = json;
+    public Config(String key, String value) {
+        this.key = key;
+        this.value = value;
     }
 
-    public String getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
-    public String getJson() {
-        return json;
+    public String getValue() {
+        return value;
     }
 
 }

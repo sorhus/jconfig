@@ -1,0 +1,30 @@
+#!/bin/bash
+
+JAR="/home/anton/src/jconfig/client/target/jconfig-client-1.0.0-SNAPSHOT-jar-with-dependencies.jar"
+
+if [ $# -ne 1 ]; then
+    echo "Specify config key."
+    exit
+else
+    key=$1
+fi
+
+tmp="jconfig-tmp-$RANDOM"
+java -jar $JAR -k $key -pp > $tmp 2> /dev/null
+
+answer="y"
+while [ "${answer:0:1}" != "n" ]
+do
+    vim $tmp
+    cat $tmp | java -jar $JAR -k $key -s
+    rc=$?
+    if [ $rc -ne 0 ]
+    then
+        echo "Something went wrong. Retry? [Y/n]"
+        read answer
+    else
+        answer="n"
+    fi
+done
+
+rm $tmp

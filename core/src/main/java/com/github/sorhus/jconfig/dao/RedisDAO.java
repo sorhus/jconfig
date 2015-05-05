@@ -15,24 +15,24 @@ import java.util.Map;
 public class RedisDAO implements DAO {
 
     private final JedisPool jedisPool;
-    private final String jc;
+    private final String redisKey;
 
-    public RedisDAO(JedisPool jedisPool, String jc) {
+    public RedisDAO(JedisPool jedisPool, String redisKey) {
         this.jedisPool = jedisPool;
-        this.jc = jc;
+        this.redisKey = redisKey;
     }
 
     @Override
-    public String get(String id) {
+    public String get(String key) {
         try(Jedis jedis = jedisPool.getResource()) {
-            return jedis.hget(jc, id);
+            return jedis.hget(redisKey, key);
         }
     }
 
     @Override
-    public void put(String id, String json) {
+    public void put(String key, String value) {
         try(Jedis jedis = jedisPool.getResource()) {
-            jedis.hset(jc, id, json);
+            jedis.hset(redisKey, key, value);
         }
     }
 
@@ -41,7 +41,7 @@ public class RedisDAO implements DAO {
         try(Jedis jedis = jedisPool.getResource()) {
             Pipeline pipeline = jedis.pipelined();
             for(Config config : configs) {
-                pipeline.hset(jc, config.getId(), config.getJson());
+                pipeline.hset(redisKey, config.getKey(), config.getValue());
             }
             pipeline.sync();
         }
@@ -50,7 +50,7 @@ public class RedisDAO implements DAO {
     // TODO implement with scan
     public Iterable<Config> getAll() {
         try(Jedis jedis = jedisPool.getResource()) {
-            Map<String, String> content = jedis.hgetAll(jc);
+            Map<String, String> content = jedis.hgetAll(redisKey);
             List<Config> result = new LinkedList<>();
             for(Map.Entry<String, String> entry : content.entrySet()) {
                 result.add(new Config(entry.getKey(), entry.getValue()));

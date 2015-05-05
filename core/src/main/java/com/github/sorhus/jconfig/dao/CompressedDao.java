@@ -22,18 +22,18 @@ public class CompressedDao implements DAO {
     }
 
     @Override
-    public String get(String id) {
-        String compressed = dao.get(id);
+    public String get(String key) {
+        String compressed = dao.get(key);
         String result = compressor.decompress(compressed);
         log.info("decompressing {} into {}", compressed, result);
         return result;
     }
 
     @Override
-    public void put(String id, String value) {
+    public void put(String key, String value) {
         String compressed = compressor.compress(value);
         log.info("compressing {} into {}", value, compressed);
-        dao.put(id, compressed);
+        dao.put(key, compressed);
     }
 
     @Override

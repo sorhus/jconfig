@@ -21,19 +21,19 @@ import java.sql.SQLException;
 public interface MySQLDAO extends DAO {
 
     @Override
-    @SqlQuery("SELECT json FROM configs where id = :id")
-    public String get(@Bind("id") String id);
+    @SqlQuery("SELECT value FROM configs WHERE `key` = :key")
+    public String get(@Bind("key") String key);
 
     @Override
-    @SqlUpdate("INSERT INTO configs (id, json) VALUES (:id, :json) ON DUPLICATE KEY UPDATE json = :json")
-    public void put(@Bind("id") String id, @Bind("json") String value);
+    @SqlUpdate("INSERT INTO configs (`key`, value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE value = :value")
+    public void put(@Bind("key") String key, @Bind("value") String value);
 
     @Override
-    @SqlQuery("SELECT id, json FROM configs")
+    @SqlQuery("SELECT `key`, value FROM configs")
     public Iterable<Config> getAll();
 
     @Override
-    @SqlBatch("INSERT INTO configs (id, json) VALUES (:id, :json) ON DUPLICATE KEY UPDATE json = :json")
+    @SqlBatch("INSERT INTO configs (`key`, value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE value = :value")
     @BatchChunkSize(1000)
     public void putAll(@BindBean Iterable<Config> configs);
 
@@ -42,7 +42,7 @@ public interface MySQLDAO extends DAO {
     public class ConfigMapper implements ResultSetMapper<Config> {
         @Override
         public Config map(int index, ResultSet resultSet, StatementContext statementContext) throws SQLException {
-            return new Config(resultSet.getString("id"), resultSet.getString("json"));
+            return new Config(resultSet.getString("key"), resultSet.getString("value"));
         }
     }
 

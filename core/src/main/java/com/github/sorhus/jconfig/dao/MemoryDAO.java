@@ -23,19 +23,19 @@ public class MemoryDAO implements DAO {
     }
 
     @Override
-    public String get(String id) {
-        return map.get(id);
+    public String get(String key) {
+        return map.get(key);
     }
 
     @Override
-    public void put(String id, String json) {
-        map.put(id, json);
+    public void put(String key, String value) {
+        map.put(key, value);
     }
 
     @Override
     public void putAll(Iterable<Config> configs) {
         for(Config config : configs) {
-            put(config.getId(), config.getJson());
+            put(config.getKey(), config.getValue());
         }
     }
 

@@ -28,13 +28,14 @@ public class ParseJsonFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         log.info("applying filter {}", getClass());
-        String json = servletRequest.getParameter("json");
+        String input = servletRequest.getParameter("json");
+        log.debug("incoming value: {}", input);
         try {
-            Object o = gson.fromJson(json, Object.class);
-            log.debug("deserialized json: {}", o);
+            Object o = gson.fromJson(input, Object.class);
+            log.debug("deserialized value: {}", o);
             filterChain.doFilter(servletRequest, servletResponse);
         } catch(JsonParseException e) {
-            log.info("could not parse json: {}", json);
+            log.info("could not parse json: {}", input);
             log.debug("{}", e);
             ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_BAD_REQUEST);
         }

@@ -1,6 +1,7 @@
 package com.github.sorhus.jconfig.servlet;
 
 import com.github.sorhus.jconfig.dao.DAO;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,25 +18,29 @@ import java.io.IOException;
 public class JConfigServlet extends HttpServlet {
 
     private DAO dao;
+    private boolean strictJson;
+
+    private final Gson gson = new Gson();
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         dao = (DAO) config.getServletContext().getAttribute("dao");
+        strictJson = (boolean) config.getServletContext().getAttribute("strictJson");
         log.info("init Servlet with DAO: {}", dao);
     }
 
     @Override
     protected void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws ServletException, IOException {
-        String id = servletRequest.getParameter("id");
-        log.info("incoming get, id: {}", id);
-        String result = dao.get(id);
-        log.debug("dao returned, json: {}", result);
-        if(null != result) {
+        String key = servletRequest.getParameter("key");
+        log.info("incoming get, key: {}", key);
+        String value = dao.get(key);
+        log.debug("dao returned value: {}", value);
+        if(null != value) {
             servletResponse.setContentType("application/json");
             servletResponse.setCharacterEncoding("utf-8");
             servletResponse.setStatus(HttpServletResponse.SC_OK);
-            servletResponse.getWriter().print(result);
+            servletResponse.getWriter().print(value);
         } else {
             servletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -43,15 +48,18 @@ public class JConfigServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws ServletException, IOException {
-        String id = servletRequest.getParameter("id");
-        String value = servletRequest.getParameter("json");
-        log.info("incoming post, id: {}, json: {}", id, value);
+        String key = servletRequest.getParameter("key");
+        String value = servletRequest.getParameter("value");
+        log.info("incoming post, key: {}, value: {}", key, value);
         try {
-            dao.put(id, value);
-            log.debug("stored json for id {}", id);
+            if(strictJson) {
+                value = gson.toJson(gson.fromJson(value, Object.class));
+            }
+            dao.put(key, value);
+            log.debug("stored value {} for key {}", value, key);
             servletResponse.setStatus(HttpServletResponse.SC_OK);
         } catch(RuntimeException e) {
-            log.error("could not store json for id {}, {}", id, e);
+            log.error("could not store value {} for key {}, {}", key, e);
             servletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

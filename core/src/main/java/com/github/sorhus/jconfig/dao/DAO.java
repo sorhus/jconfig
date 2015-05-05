@@ -9,8 +9,8 @@ import java.util.Map;
  */
 public interface DAO {
 
-    public String get(String id);
-    public void put(String id, String json);
+    public String get(String key);
+    public void put(String key, String value);
     public void putAll(Iterable<Config> configs);
     public Iterable<Config> getAll();
 }
