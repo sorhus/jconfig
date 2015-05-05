@@ -13,8 +13,8 @@ $ java -jar server/target/jconfig-server-<version>-jar-with-dependencies.jar
 
 To use the cli with default server settings (localhost:8080)
 ```bash
-$ java -jar client/target/jconfig-client-<version>-jar-with-dependencies.jar -i my_id -j '{"json":"here"}'
-$ java -jar client/target/jconfig-client-<version>-jar-with-dependencies.jar -i my_id
+$ java -jar client/target/jconfig-client-<version>-jar-with-dependencies.jar -k my_key -v '{"json":"here"}'
+$ java -jar client/target/jconfig-client-<version>-jar-with-dependencies.jar -k my_key -s
 {"json":"here"}
 $
 ```
