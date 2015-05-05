@@ -18,3 +18,7 @@ $ java -jar client/target/jconfig-client-<version>-jar-with-dependencies.jar -k 
 {"json":"here"}
 $
 ```
+
+There is also a higher level bash client for convenient modification of a value.
+`client/src/main/resources/jconfig my_key` will open a file in vim with any content associated to the key. 
+On exit the file content will be saved.
