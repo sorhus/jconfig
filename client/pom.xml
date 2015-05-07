@@ -28,6 +28,8 @@
               <mainClass>com.github.sorhus.jconfig.client.CLI</mainClass>
             </manifest>
           </archive>
+          <finalName>${project.artifactId}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
         <executions>
           <execution>

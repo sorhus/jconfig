@@ -8,13 +8,13 @@ It is intended for small config files and such.
 To start the server with default settings (in-memory mode, port 8080, etc):
 ```bash
 $ mvn clean package
-$ java -jar server/target/jconfig-server-<version>-jar-with-dependencies.jar
+$ java -jar server/target/jconfig-server.jar
 ```
 
 To use the cli with default server settings (localhost:8080)
 ```bash
-$ java -jar client/target/jconfig-client-<version>-jar-with-dependencies.jar -k my_key -v '{"json":"here"}'
-$ java -jar client/target/jconfig-client-<version>-jar-with-dependencies.jar -k my_key -s
+$ java -jar client/target/jconfig-client.jar -k my_key -v '{"json":"here"}'
+$ java -jar client/target/jconfig-client.jar -k my_key -s
 {"json":"here"}
 $
 ```

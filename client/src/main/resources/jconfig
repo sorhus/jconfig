@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAR="/home/anton/src/jconfig/client/target/jconfig-client-1.0.0-SNAPSHOT-jar-with-dependencies.jar"
+JAR="/home/anton/src/jconfig/client/target/jconfig-client.jar"
 
 if [ $# -ne 1 ]; then
     echo "Specify config key."
