@@ -1,7 +1,7 @@
 jconfig - basic key value store
 =======
 
-JConfig is a small webapp that will let you store key value pairs in memeory, sql or redis.
+JConfig is a small webapp that will let you store key value pairs in memory, sql or redis.
 It comes with a Java client as well as a command line tool.
 It is intended for small config files and such.
 
@@ -22,3 +22,15 @@ $
 There is also a higher level bash client for convenient modification of a value.
 `client/src/main/resources/jconfig my_key` will open a file in vim with any content associated to the key. 
 On exit the file content will be saved.
+
+#(Work in progress)
+It's possible to run it in a docker container, and link to another container running a mysql instance.
+
+To do that, you need to set the environment variable JCONFIG_MYSQL_ROOT_PASSWORD that will be used in the docker container.
+
+Then you can do
+* `mvn clean package`
+* `docker build -t jconfig .`
+* `./scripts/docker/mysql/create-server-container.sh`
+* `./scripts/docker/jconfig/run-container.sh`
+
