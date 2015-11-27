@@ -1,6 +1,7 @@
 #!/bin/bash
 
-JAR="/home/anton/src/jconfig/client/target/jconfig-client.jar"
+JAR="client/src/jconfig/client/target/jconfig-client.jar"
+PORT=8081
 
 if [ $# -ne 1 ]; then
     echo "Specify config key."
@@ -10,13 +11,13 @@ else
 fi
 
 tmp="jconfig-tmp-$RANDOM"
-java -jar $JAR -k $key -pp > $tmp 2> /dev/null
+java -jar $JAR -p $PORT -k $key -pp > $tmp 2> /dev/null
 
 answer="y"
 while [ "${answer:0:1}" != "n" ]
 do
     vim $tmp
-    cat $tmp | java -jar $JAR -k $key -s
+    cat $tmp | java -jar $JAR -p $PORT -k $key -s
     rc=$?
     if [ $rc -ne 0 ]
     then
