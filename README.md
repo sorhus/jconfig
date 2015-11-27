@@ -24,9 +24,15 @@ There is also a higher level bash client for convenient modification of a value.
 On exit the file content will be saved.
 
 #(Work in progress)
-It's possible to run it in a docker container, and link to another container running a mysql instance.
+It's possible to run it in a docker container, and link to another container running a mysql or redis instance.
 
-To do that, you need to set the environment variable JCONFIG_MYSQL_ROOT_PASSWORD that will be used in the docker container.
+To run a redis container and then link jconfig to that redis instance, do the following
+* `mvn clean package`
+* `docker build -t jconfig .`
+* `./scripts/docker/redis/create-server-container.sh`
+* `./scripts/docker/jconfig/run-jconfig-redis.sh`
+
+To run it against a mysql container instead, you need to set the environment variable JCONFIG_MYSQL_ROOT_PASSWORD that will be used in the docker container.
 
 Then you can do
 * `mvn clean package`
