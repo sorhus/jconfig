@@ -5,6 +5,6 @@ package com.github.sorhus.jconfig.compression;
  */
 public interface Compressor {
 
-    public String decompress(String input);
-    public String compress(String input);
+    String decompress(String input);
+    String compress(String input);
 }

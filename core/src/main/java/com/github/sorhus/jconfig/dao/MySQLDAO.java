@@ -22,24 +22,24 @@ public interface MySQLDAO extends DAO {
 
     @Override
     @SqlQuery("SELECT value FROM configs WHERE `key` = :key")
-    public String get(@Bind("key") String key);
+    String get(@Bind("key") String key);
 
     @Override
     @SqlUpdate("INSERT INTO configs (`key`, value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE value = :value")
-    public void put(@Bind("key") String key, @Bind("value") String value);
+    void put(@Bind("key") String key, @Bind("value") String value);
 
     @Override
     @SqlQuery("SELECT `key`, value FROM configs")
-    public Iterable<Config> getAll();
+    Iterable<Config> getAll();
 
     @Override
     @SqlBatch("INSERT INTO configs (`key`, value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE value = :value")
     @BatchChunkSize(1000)
-    public void putAll(@BindBean Iterable<Config> configs);
+    void putAll(@BindBean Iterable<Config> configs);
 
     void close();
 
-    public class ConfigMapper implements ResultSetMapper<Config> {
+    class ConfigMapper implements ResultSetMapper<Config> {
         @Override
         public Config map(int index, ResultSet resultSet, StatementContext statementContext) throws SQLException {
             return new Config(resultSet.getString("key"), resultSet.getString("value"));
