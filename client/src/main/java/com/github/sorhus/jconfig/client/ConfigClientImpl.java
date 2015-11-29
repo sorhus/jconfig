@@ -16,7 +16,6 @@ class ConfigClientImpl {
     private final String baseURL;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final Gson gson = new Gson();
     private final GZipCompressor compressor = new GZipCompressor();
 
     ConfigClientImpl(String host, int port, boolean compress) {

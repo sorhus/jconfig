@@ -4,12 +4,7 @@
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="locations">
-      <value>config.properties</value>
-    </property>
-  </bean>
-
+  <import resource="properties.xml" />
   <bean id="dbi" class="org.skife.jdbi.v2.DBI">
     <constructor-arg index="0" value="jdbc:mysql://${MYSQL_PORT_3306_TCP_ADDR}/jconfig?user=root&amp;password=${JCONFIG_MYSQL_ROOT_PASSWORD}"/>
   </bean>

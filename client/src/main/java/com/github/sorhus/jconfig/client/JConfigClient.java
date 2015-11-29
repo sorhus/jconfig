@@ -15,9 +15,9 @@ public class JConfigClient {
 
     public JConfigClient(String path) throws IOException {
         Properties properties = new Properties();
-        FileInputStream file = new FileInputStream(path);
-        properties.load(file);
-        file.close();
+        try(FileInputStream file = new FileInputStream(path)) {
+            properties.load(file);
+        }
         String host = properties.getProperty("jconfig.host");
         int port = Integer.parseInt(properties.getProperty("jconfig.port"));
         boolean compress = Boolean.parseBoolean(properties.getProperty("jconfig.compress", "false"));

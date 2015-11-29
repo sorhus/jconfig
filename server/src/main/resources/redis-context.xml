@@ -4,11 +4,7 @@
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="locations">
-      <value>config.properties</value>
-    </property>
-  </bean>
+  <import resource="properties.xml" />
   <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
     <constructor-arg index="0" value="${REDIS_PORT_6379_TCP_ADDR}"/>
     <constructor-arg index="1" value="${REDIS_PORT_6379_TCP_PORT}" type="int"/>
