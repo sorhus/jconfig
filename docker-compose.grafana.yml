@@ -1,0 +1,6 @@
+grafana:
+  image: grafana/grafana
+  links:
+    - graphite
+  ports:
+    - "8082:3000"

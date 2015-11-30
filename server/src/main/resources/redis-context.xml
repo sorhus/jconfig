@@ -6,8 +6,8 @@
 
   <import resource="properties.xml" />
   <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
-    <constructor-arg index="0" value="${REDIS_PORT_6379_TCP_ADDR}"/>
-    <constructor-arg index="1" value="${REDIS_PORT_6379_TCP_PORT}" type="int"/>
+    <constructor-arg index="0" value="${BACKEND_PORT_6379_TCP_ADDR}"/>
+    <constructor-arg index="1" value="${BACKEND_PORT_6379_TCP_PORT}" type="int"/>
   </bean>
   <bean id="dao" class="com.github.sorhus.jconfig.dao.RedisDAO">
     <constructor-arg index="0" ref="jedisPool"/>
