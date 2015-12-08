@@ -1,4 +1,5 @@
 grafana:
+  container_name: jconfig-grafana
   image: grafana/grafana
   links:
     - graphite

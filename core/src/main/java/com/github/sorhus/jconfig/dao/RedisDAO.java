@@ -1,6 +1,8 @@
 package com.github.sorhus.jconfig.dao;
 
 import com.github.sorhus.jconfig.model.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
@@ -16,6 +18,7 @@ public class RedisDAO implements DAO {
 
     private final JedisPool jedisPool;
     private final String redisKey;
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     public RedisDAO(JedisPool jedisPool, String redisKey) {
         this.jedisPool = jedisPool;
@@ -25,6 +28,7 @@ public class RedisDAO implements DAO {
     @Override
     public String get(String key) {
         try(Jedis jedis = jedisPool.getResource()) {
+            log.debug("Redis lookup: {}", key);
             return jedis.hget(redisKey, key);
         }
     }
@@ -32,6 +36,7 @@ public class RedisDAO implements DAO {
     @Override
     public void put(String key, String value) {
         try(Jedis jedis = jedisPool.getResource()) {
+            log.debug("Redis put: {}, {}", key, value);
             jedis.hset(redisKey, key, value);
         }
     }

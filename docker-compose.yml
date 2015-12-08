@@ -1,14 +1,15 @@
 jconfig:
   container_name: jconfig
-  build: .
+  image: jconfig
   ports:
     - "8080:8080"
   links:
     - backend:backend
     - graphite:graphite
-  command: -b redis -g
+  command: -b redis --cache 1000 --graphite
 
 graphite:
+  container_name: jconfig-graphite
   image: nickstenning/graphite
   ports:
     - "8081:80"

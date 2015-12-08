@@ -9,14 +9,14 @@ import org.slf4j.LoggerFactory;
 /**
  * @author: anton.sorhus@gmail.com
  */
-public class CompressedDao implements DAO {
+public class CompressedDAO implements DAO {
 
     private final DAO dao;
     private final Compressor compressor;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    public CompressedDao(DAO dao, Compressor compressor) {
+    public CompressedDAO(DAO dao, Compressor compressor) {
         this.dao = dao;
         this.compressor = compressor;
     }

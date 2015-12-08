@@ -5,9 +5,13 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
   <import resource="properties.xml" />
+  <bean id="poolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+    <property name="MaxTotal" value="25"/>
+  </bean>
   <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
-    <constructor-arg index="0" value="${BACKEND_PORT_6379_TCP_ADDR}"/>
-    <constructor-arg index="1" value="${BACKEND_PORT_6379_TCP_PORT}" type="int"/>
+    <constructor-arg index="0" ref="poolConfig"/>
+    <constructor-arg index="1" value="${BACKEND_PORT_6379_TCP_ADDR}" type="String"/>
+    <constructor-arg index="2" value="${BACKEND_PORT_6379_TCP_PORT}" type="int"/>
   </bean>
   <bean id="dao" class="com.github.sorhus.jconfig.dao.RedisDAO">
     <constructor-arg index="0" ref="jedisPool"/>

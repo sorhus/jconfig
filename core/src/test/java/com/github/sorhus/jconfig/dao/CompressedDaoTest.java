@@ -16,7 +16,7 @@ public class CompressedDaoTest {
         Compressor compressor = mock(Compressor.class);
         when(compressor.decompress("compressed")).thenReturn("json");
 
-        CompressedDao instance = new CompressedDao(dao, compressor);
+        CompressedDAO instance = new CompressedDAO(dao, compressor);
         String expected = "json";
         String result = instance.get("id");
         assertThat(result, equalTo(expected));
@@ -28,7 +28,7 @@ public class CompressedDaoTest {
         Compressor compressor = mock(Compressor.class);
         when(compressor.compress("json")).thenReturn("compressed");
 
-        CompressedDao instance = new CompressedDao(dao, compressor);
+        CompressedDAO instance = new CompressedDAO(dao, compressor);
         instance.put("id", "json");
 
         verify(compressor, times(1)).compress("json");
