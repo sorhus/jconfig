@@ -11,20 +11,13 @@ import com.github.sorhus.jconfig.dao.CachedDAO;
 import com.github.sorhus.jconfig.dao.CompressedDAO;
 import com.github.sorhus.jconfig.dao.DAO;
 import com.github.sorhus.jconfig.compression.FakeCompressor;
-import com.github.sorhus.jconfig.filter.ParseJsonFilter;
-import com.github.sorhus.jconfig.servlet.JConfigServlet;
-import org.eclipse.jetty.server.Connector;
+import com.github.sorhus.jconfig.handler.JConfigHandler;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.servlet.DispatcherType;
-import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 
 class JconfigServer {
@@ -73,46 +66,13 @@ class JconfigServer {
         }
 
         log.info("Initialising Server on port {}", port);
-        Handler handler;
-
-        ServletContextHandler servletHandler = new ServletContextHandler();
-        servletHandler.setContextPath("/");
-        servletHandler.setAttribute("dao", dao);
-        log.info("Applying strict json: {}", strictJson);
-        servletHandler.setAttribute("strictJson", strictJson);
-        servletHandler.addServlet(JConfigServlet.class, "/api/v1/get");
-        servletHandler.addServlet(JConfigServlet.class, "/api/v1/set");
-
-        handler = servletHandler;
-
-        if(strictJson) {
-            servletHandler.addFilter(ParseJsonFilter.class, "/api/set", EnumSet.of(DispatcherType.REQUEST));
-        }
+        Handler handler = new JConfigHandler(dao, strictJson);
 
         if(graphite) {
-            MetricRegistry registry = new MetricRegistry();
-
-            InstrumentedHandler instrumentedHandler = new InstrumentedHandler(registry);
-            instrumentedHandler.setHandler(servletHandler);
-            handler = instrumentedHandler;
-
-            Graphite graphite = new ClassPathXmlApplicationContext("graphite-context.xml")
-                    .getBean("graphite", Graphite.class);
-            GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
-                    .convertRatesTo(TimeUnit.SECONDS)
-                    .convertDurationsTo(TimeUnit.MILLISECONDS)
-                    .build(graphite);
-
-            reporter.start(1, TimeUnit.MINUTES);
+            handler = graphiteWrapHandler(handler);
         }
 
-//        int threads = 20;
-//        QueuedThreadPool threadPool = new QueuedThreadPool(threads, threads/4);
-//        Server server = new Server(threadPool);
-//        ServerConnector connector = new ServerConnector(server);
-//        connector.setPort(port);
-//        server.setConnectors(new Connector[] {connector});
-
+        log.info("Handler: {}", handler);
 
         Server server = new Server(port);
         server.setHandler(handler);
@@ -120,4 +80,21 @@ class JconfigServer {
         server.join();
     }
 
-}
+    private static Handler graphiteWrapHandler(Handler handler) {
+        MetricRegistry registry = new MetricRegistry();
+
+        InstrumentedHandler instrumentedHandler = new InstrumentedHandler(registry);
+        instrumentedHandler.setHandler(handler);
+
+        Graphite graphite = new ClassPathXmlApplicationContext("graphite-context.xml")
+                .getBean("graphite", Graphite.class);
+
+        GraphiteReporter reporter = GraphiteReporter.forRegistry(registry)
+                .convertRatesTo(TimeUnit.SECONDS)
+                .convertDurationsTo(TimeUnit.MILLISECONDS)
+                .build(graphite);
+
+        reporter.start(1, TimeUnit.MINUTES);
+        return instrumentedHandler;
+    }
+ }
