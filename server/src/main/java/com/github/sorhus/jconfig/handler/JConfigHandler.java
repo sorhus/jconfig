@@ -53,11 +53,9 @@ public class JConfigHandler extends AbstractHandler {
         String key = request.getParameter("key");
         log.debug("incoming get, key: {}", key);
         String value = dao.get(key);
-        log.debug("dao returned value: {}", value);
         String filter = request.getParameter("filter");
-        log.debug("incoming filter: {}", filter);
         if(null != filter) {
-            value = jqFilter.filter(value, filter);
+            value = jqFilter.apply(value, filter);
         }
         if(null != value) {
             response.setContentType("application/json");
@@ -74,8 +72,16 @@ public class JConfigHandler extends AbstractHandler {
         String key = request.getParameter("key");
         String value = request.getParameter("value");
         log.info("incoming post, key: {}, value: {}", key, value);
-        if(strictJson && !jsonFilter.doFilter(value)) {
+        if(null == value) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if(strictJson) {
+            value = jsonFilter.apply(value);
+            if(value == null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
         }
         try {
             dao.put(key, value);

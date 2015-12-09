@@ -5,24 +5,24 @@ import com.google.gson.JsonParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Function;
+
 /**
  * @author: anton.sorhus@gmail.com
  */
-public class JsonFilter {
+public class JsonFilter implements Function<String, String> {
 
     private final Gson gson = new Gson();
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    public boolean doFilter(String maybeJson) {
+    @Override
+    public String apply(String maybeJson) {
         log.debug("incoming value: {}", maybeJson);
         try {
-            Object o = gson.fromJson(maybeJson, Object.class);
-            log.debug("deserialized value: {}", o);
-            return true;
+            return gson.toJson(gson.fromJson(maybeJson, Object.class));
         } catch(JsonParseException e) {
-            log.info("could not parse json: {}", maybeJson);
-            log.debug("{}", e);
-            return false;
+            log.debug("could not parse json: {}", maybeJson, e);
+            return null;
         }
     }
 }

@@ -65,7 +65,6 @@ class JconfigServer {
             dao = new CompressedDAO(dao, new FakeCompressor());
         }
 
-        log.info("Initialising Server on port {}", port);
         Handler handler = new JConfigHandler(dao, strictJson);
 
         if(graphite) {
@@ -74,6 +73,7 @@ class JconfigServer {
 
         log.info("Handler: {}", handler);
 
+        log.info("Initialising Server on port {}", port);
         Server server = new Server(port);
         server.setHandler(handler);
         server.start();
